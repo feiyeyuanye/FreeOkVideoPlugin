@@ -11,8 +11,8 @@ android {
         applicationId = "com.jhr.freeokvideoplugin"
         minSdk = 21
         targetSdk = 31
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 2
+        versionName = "1.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -24,11 +24,11 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            resValue("string", "app_name", "FreeOk")
+            resValue("string", "app_name", "FreeOk影视")
         }
         debug {
             applicationIdSuffix = ".debug"
-            resValue("string", "app_name", "dFreeOk")
+            resValue("string", "app_name", "dFreeOk影视")
         }
     }
     compileOptions {

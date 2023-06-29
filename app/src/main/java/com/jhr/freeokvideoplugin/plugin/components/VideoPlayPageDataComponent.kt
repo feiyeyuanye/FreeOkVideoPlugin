@@ -79,16 +79,14 @@ class VideoPlayPageDataComponent : IVideoPlayPageDataComponent {
      */
     override suspend fun getVideoPlayMedia(episodeUrl: String): VideoPlayMedia {
         val url = host + episodeUrl
-//        val document = JsoupUtil.getDocument(url)
-        // 剧集名
-        var name = ""
+        val document = JsoupUtil.getDocument(url)
 
         val cookies = mapOf("cookie" to PluginPreferenceIns.get(JsoupUtil.cfClearanceKey, ""))
         //解析链接
         val videoUrl = withContext(Dispatchers.Main) {
             val iframeUrl = withTimeoutOrNull(10 * 1000) {
                 WebUtilIns.interceptResource(
-                    url, "(.*)url=(.*)",
+                    url, ".*\\b(mp4|m3u8)\\b.*",
                     loadPolicy = object : WebUtil.LoadPolicy by WebUtil.DefaultLoadPolicy {
                         override val headers = cookies
                         override val userAgentString = ua
@@ -98,12 +96,10 @@ class VideoPlayPageDataComponent : IVideoPlayPageDataComponent {
             } ?: ""
             async {
                 Log.e("TAG", iframeUrl)
-                // https://hd.lz-cdn18.com/20230618/3450_afaff38f/index.m3u8
-                // https://sf9-xgcdn-tos.pstatp.com/obj/tos-cn-i-8gu37r9deh/e88b48cfe27e49bdbeb920f6f9f4ec54?freeok.mp4
                 when {
                     iframeUrl.isBlank() -> iframeUrl
+                    iframeUrl.endsWith(".mp4") -> iframeUrl
                     iframeUrl.contains("okplay") -> {
-                        name = iframeUrl.substringAfter("title=").urlDecode()
                         iframeUrl.substringAfter("url=").substringBefore("&").urlDecode()
                     }
                     else -> {}
@@ -111,14 +107,14 @@ class VideoPlayPageDataComponent : IVideoPlayPageDataComponent {
             }
         }
         //剧集名
-//        val name = withContext(Dispatchers.Default) {
-//            async {
-//                document.select("title").text().split("-")[0]
-//            }
-//        }
-        Log.e("TAG", name)
+        val name = withContext(Dispatchers.Default) {
+            async {
+                document.select("title").text().split("-")[0]
+            }
+        }
+        Log.e("TAG", name.await())
         Log.e("TAG", videoUrl.await() as String)
-        return VideoPlayMedia(name, videoUrl.await() as String)
+        return VideoPlayMedia(name.await(), videoUrl.await() as String)
     }
 
 }
