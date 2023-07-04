@@ -12,7 +12,7 @@ class MediaSearchPageDataComponent : IMediaSearchPageDataComponent {
     override suspend fun getSearchData(keyWord: String, page: Int): List<BaseData> {
         val searchResultList = mutableListOf<BaseData>()
 
-        val url = "${host}/vod--search/${keyWord}----------${page}---.html"
+        val url = "${host}/okso/${keyWord}----------${page}---.html"
         Log.e("TAG", url)
 
         val document = JsoupUtil.getDocument(url)

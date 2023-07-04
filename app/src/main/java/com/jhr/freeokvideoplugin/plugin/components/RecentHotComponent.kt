@@ -17,7 +17,9 @@ class RecentHotComponent: ICustomPageDataComponent {
     override val pageName: String
         get() = "近期热门"
 
-    override suspend fun getData(page: Int): List<BaseData> {
+    override suspend fun getData(page: Int): List<BaseData>? {
+        if (page != 1)
+            return null
         val hostUrl = Const.host + "/label/hot.html"
         val document = JsoupUtil.getDocument(hostUrl)
 

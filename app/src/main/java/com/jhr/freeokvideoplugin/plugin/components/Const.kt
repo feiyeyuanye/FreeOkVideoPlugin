@@ -3,7 +3,7 @@ package com.jhr.freeokvideoplugin.plugin.components
 import com.su.mediabox.pluginapi.Constant
 
 object Const {
-
+    // 不可以挂代理
     val host: String = "https://www.freeok.vip"
 
     val ua = Constant.Request.USER_AGENT_ARRAY[0]

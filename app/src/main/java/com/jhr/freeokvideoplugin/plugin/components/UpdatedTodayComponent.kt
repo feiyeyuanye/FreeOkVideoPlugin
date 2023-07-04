@@ -23,7 +23,9 @@ class UpdatedTodayComponent : ICustomPageDataComponent {
     /**
      * bug -> 这里只有一页，所以上拉加载会添加重复数据。
      */
-    override suspend fun getData(page: Int): List<BaseData> {
+    override suspend fun getData(page: Int): List<BaseData>? {
+        if (page != 1)
+            return null
         val hostUrl = Const.host + "/label/new.html"
         val document = JsoupUtil.getDocument(hostUrl)
 
